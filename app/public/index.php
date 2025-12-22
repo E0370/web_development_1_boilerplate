@@ -66,7 +66,11 @@ switch ($routeInfo[0]) {
 
         // TODO: pass the dynamic route data to the controller method
         // When done, visiting `http://localhost/hello/dan-the-man` should output "Hi, dan-the-man!"
-        throw new Exception('Not implemented yet');
+        $class = $routeInfo[1][0];
+        $method = $routeInfo[1][1];
+        $controller = new $class();
+        $params = $routeInfo[2];
+        $controller->$method($params);
 
         break;
 }
