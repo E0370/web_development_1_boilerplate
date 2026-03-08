@@ -1,0 +1,27 @@
+.card {
+    padding: 10px;
+}
+
+#rule-length,
+#rule-uppercase,
+#rule-lowercase,
+#rule-number,
+#rule-special {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.passed {
+    text-decoration: line-through;
+    color: green;
+    font-weight: 600;
+}
+
+#confirmpassword-feedback {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.password-block {
+    position: relative;
+}

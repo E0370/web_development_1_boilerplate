@@ -1,14 +1,23 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
 
-<section class="hero">
-    <div class="hero-overlay text-center">
-        <h1>Lost Something?</h1>
-        <p>Browse lost and found items posted by the community.</p>
-    </div>
-</section>
+<div class="container mt-4">
+    <h2 class="mb-4">My Items</h2>
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Lost & Found Items</h2>
+    <?php if (isset($_SESSION['success_message'])) { ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['success_message']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['success_message']); ?>
+    <?php } ?>
+
+    <?php if (isset($_SESSION['error_message'])) { ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['error_message']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['error_message']); ?>
+    <?php } ?>
 
     <?php if (!empty($items)) { ?>
         <div class="row g-4">
@@ -36,18 +45,20 @@
                                 ?>
                             </small>
 
-                            <?php if (isset($_SESSION['user'])) { ?>
-                                <a href="/messages/<?= urlencode($item->id) ?>" class="btn btn-sm btn-primary">Claim</a>
-                            <?php } else { ?>
-                                <a href="/login" class="btn btn-sm btn-primary">Claim</a>
-                            <?php } ?>
+                            <div class="d-flex gap-2">
+                                <a href="/edititem/<?= urlencode($item->id) ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+
+                                <form method="POST" action="/deleteitem/<?= urlencode($item->id) ?>" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             <?php } ?>
         </div>
     <?php } else { ?>
-        <p class="text-center">No items found yet.</p>
+        <p>No items found.</p>
     <?php } ?>
 </div>
 
