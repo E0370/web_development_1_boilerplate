@@ -27,7 +27,7 @@ class AdminController
         $users = $this->userService->getAllUsers($_SESSION['user']['role']);
         $items = $this->itemService->getAllItems();
 
-        require __DIR__ . '/../Views/dashboard.php';
+        require __DIR__ . '/../Views/admindashboard.php';
     }
 
     public function showCreateUser()

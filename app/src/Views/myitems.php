@@ -1,7 +1,7 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
 
 <div class="container mt-4">
-    <h2 class="mb-4">My Items</h2>
+    <h2 class="mb-4">My Posts</h2>
 
     <?php if (isset($_SESSION['success_message'])) { ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -58,7 +58,7 @@
             <?php } ?>
         </div>
     <?php } else { ?>
-        <p>No items found.</p>
+        <p>No Posts found</p>
     <?php } ?>
 </div>
 

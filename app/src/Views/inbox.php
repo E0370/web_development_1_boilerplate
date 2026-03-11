@@ -45,7 +45,7 @@
             <?php } ?>
         </div>
     <?php } else { ?>
-        <p class="text-muted">No conversations yet.</p>
+        <p class="text-muted">No conversations yet</p>
     <?php } ?>
 </div>
 

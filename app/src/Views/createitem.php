@@ -21,7 +21,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <h3 class="text-center mb-4">Create Item</h3>
+                <h3 class="text-center mb-4">Create Post</h3>
 
                 <form method="POST" action="/createitem" enctype="multipart/form-data">
                     <div class="mb-3">
@@ -48,7 +48,7 @@
                         <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Create Item</button>
+                    <button type="submit" class="btn btn-primary w-100">Create Post</button>
                 </form>
             </div>
         </div>

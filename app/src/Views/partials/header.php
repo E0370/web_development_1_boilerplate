@@ -45,13 +45,13 @@ $currentPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage === '/createitem') ? 'active' : '' ?>" href="/createitem">
-                            Create Item
+                            Create Post
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage === '/myitems') ? 'active' : '' ?>" href="/myitems">
-                            My Items
+                            My Posts
                         </a>
                     </li>
 
@@ -79,7 +79,7 @@ $currentPage = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
                     <li class="nav-item me-3">
                         <span class="navbar-text text-light">
-                            Hello, <?= htmlspecialchars($_SESSION['user']['username']) ?>
+                            Welcome, <?= htmlspecialchars($_SESSION['user']['username']) ?>
                         </span>
                     </li>
 
