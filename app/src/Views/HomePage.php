@@ -2,13 +2,15 @@
 
 <section class="hero">
     <div class="hero-overlay text-center">
-        <h1>Lost Something?</h1>
-        <p>Browse lost and found items posted by the community.</p>
+        <div class="container">
+            <h1 class="display-4 fw-bold">Lost Something?</h1>
+            <p class="lead">Browse lost and found posts shared by the community.</p>
+        </div>
     </div>
 </section>
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Lost & Found Items</h2>
+    <h2 class="mb-4 text-center">Latest Posts</h2>
 
     <?php if (!empty($items)) { ?>
         <div class="row g-4">
@@ -25,7 +27,10 @@
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($item->title) ?></h5>
                             <p class="card-text"><?= htmlspecialchars($item->description) ?></p>
-                            <span class="badge bg-secondary"><?= htmlspecialchars($item->status) ?></span>
+
+                            <span class="badge <?= $item->status === 'lost' ? 'bg-danger' : 'bg-success' ?>">
+                                <?= htmlspecialchars(ucfirst($item->status)) ?>
+                            </span>
                         </div>
 
                         <div class="card-footer d-flex justify-content-between align-items-center">
@@ -37,9 +42,20 @@
                             </small>
 
                             <?php if (isset($_SESSION['user'])) { ?>
-                                <a href="/messages/<?= urlencode($item->id) ?>" class="btn btn-sm btn-primary">Claim</a>
+
+                                <?php if ((int)$item->user_id !== (int)$_SESSION['user']['id']) { ?>
+                                    <a href="/messages/<?= urlencode($item->id) ?>/<?= urlencode($item->user_id) ?>"
+                                       class="btn btn-sm btn-primary">
+                                        Claim
+                                    </a>
+                                <?php } else { ?>
+                                    <span class="badge bg-secondary">Your Post</span>
+                                <?php } ?>
+
                             <?php } else { ?>
+
                                 <a href="/login" class="btn btn-sm btn-primary">Claim</a>
+
                             <?php } ?>
                         </div>
                     </div>
@@ -47,7 +63,7 @@
             <?php } ?>
         </div>
     <?php } else { ?>
-        <p class="text-center">No items found yet.</p>
+        <p class="text-center">No posts available yet.</p>
     <?php } ?>
 </div>
 

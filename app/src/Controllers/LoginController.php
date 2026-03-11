@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Services\Interfaces\ILoginService;
 use App\Services\LoginService;
 use App\Models\User;
@@ -22,8 +24,10 @@ class LoginController
     public function login(): void
     {
         try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 header('Location: /login');
                 exit();
+            }
 
             if (isset($_SESSION['user'])) {
                 unset($_SESSION['user']);
@@ -56,7 +60,6 @@ class LoginController
             exit();
 
         } catch (Exception $e) {
-
             $_SESSION['invalid_credentials'] = 'Something went wrong. Please try again.';
             header('Location: /login');
             exit();
@@ -66,8 +69,10 @@ class LoginController
     public function logout()
     {
         try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 header('Location: /');
                 exit();
+            }
 
             unset($_SESSION['user']);
 
@@ -91,8 +96,10 @@ class LoginController
     public function createAccount()
     {
         try {
-                header('Location: /register');
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                header('Location: /create-account');
                 exit();
+            }
 
             $user = new User();
             $user->firstname = trim($_POST['firstname'] ?? '');

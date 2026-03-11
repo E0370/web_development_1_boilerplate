@@ -39,7 +39,6 @@ session_start();
  * Define the routes for the application.
  */
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
-    //$r->addRoute('GET', '/', ['App\Controllers\HomePageController', 'showhome']);
     $r->addRoute('GET',  '/login',    ['App\Controllers\LoginController', 'showLogin']);
     $r->addRoute('POST', '/login',    ['App\Controllers\LoginController', 'login']);
     $r->addRoute('POST', '/logout',   ['App\Controllers\LoginController', 'logout']);
@@ -49,13 +48,25 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/forgot-password', ['App\Controllers\ResetPasswordController', 'forgotPassword']);
     $r->addRoute('GET',  '/reset-password/{token}', ['App\Controllers\ResetPasswordController', 'showResetPassword']);
     $r->addRoute('POST', '/reset-password', ['App\Controllers\ResetPasswordController', 'resetPassword']);
-    $r->addRoute('GET', '/', ['App\Controllers\ItemController', 'showAllItems']);
+    $r->addRoute('GET', '/', ['App\Controllers\ItemController', 'showAllItems']); // homepage
     $r->addRoute('GET', '/createitem', ['App\Controllers\ItemController', 'showCreateItem']);
     $r->addRoute('POST', '/createitem', ['App\Controllers\ItemController', 'createItem']);
     $r->addRoute('GET', '/myitems', ['App\Controllers\ItemController', 'showMyItems']);
     $r->addRoute('GET', '/edititem/{id}', ['App\Controllers\ItemController', 'showEditItem']);
     $r->addRoute('POST', '/edititem/{id}', ['App\Controllers\ItemController', 'updateItem']);
     $r->addRoute('POST', '/deleteitem/{id}', ['App\Controllers\ItemController', 'deleteItem']);
+    $r->addRoute('GET', '/admin', ['App\Controllers\AdminController', 'showDashboard']);
+    $r->addRoute('GET', '/admin/create-user', ['App\Controllers\AdminController', 'showCreateUser']);
+    $r->addRoute('POST', '/admin/create-user', ['App\Controllers\AdminController', 'createUser']);
+    $r->addRoute('POST', '/admin/user/role/{id}', ['App\Controllers\AdminController', 'updateUserRole']);
+    $r->addRoute('POST', '/admin/user/delete/{id}', ['App\Controllers\AdminController', 'deleteUser']);
+    $r->addRoute('GET', '/admin/edititem/{id}', ['App\Controllers\AdminController', 'showEditItem']);
+    $r->addRoute('POST', '/admin/edititem/{id}', ['App\Controllers\AdminController', 'updateItem']);
+    $r->addRoute('POST', '/admin/deleteitem/{id}', ['App\Controllers\AdminController', 'deleteItem']);
+    $r->addRoute('GET', '/user', ['App\Controllers\UserController', 'showDashboard']);
+    $r->addRoute('GET', '/my-messages', ['App\Controllers\UserController', 'showInbox']);
+    $r->addRoute('GET', '/messages/{itemId}/{userId}', ['App\Controllers\UserController', 'showMessages']);
+    $r->addRoute('POST', '/send-message', ['App\Controllers\UserController', 'sendMessage']);
 
 });
 
@@ -105,11 +116,15 @@ switch ($routeInfo[0]) {
 
         // TODO: pass the dynamic route data to the controller method
         // When done, visiting `http://localhost/hello/dan-the-man` should output "Hi, dan-the-man!"
-        $class = $routeInfo[1][0];
-        $method = $routeInfo[1][1];
-        $controller = new $class();
-        $params = $routeInfo[2];
-        $controller->$method($params);
+       $class = $routeInfo[1][0];
+$method = $routeInfo[1][1];
+$controller = new $class();
+$params = $routeInfo[2];
 
+if (!empty($params)) {
+    $controller->$method($params);
+} else {
+    $controller->$method();
+}
         break;
 }
