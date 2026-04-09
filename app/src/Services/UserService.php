@@ -72,12 +72,21 @@ class UserService implements IUserService
         return $this->userRepository->deleteUser($userId);
     }
 
-    public function updateUserRole($userId, $role, $currentUserRole)
+    public function updateUserRole($userId, $role, $currentUserRole, $currentUserId)
     {
         $this->requireAdmin($currentUserRole);
 
         if (!in_array($role, ['user', 'admin'])) {
             throw new Exception("Invalid role.");
+        }
+
+        if (empty($userId)) {
+            throw new Exception("Invalid user.");
+        }
+
+        // admin cannot change his own role
+        if ((string)$userId === (string)$currentUserId) {
+            throw new Exception("You cannot change your own role.");
         }
 
         return $this->userRepository->updateUserRole($userId, $role);

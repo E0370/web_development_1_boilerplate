@@ -9,7 +9,7 @@ use App\Services\Interfaces\IItemService;
 use App\Services\ItemService;
 use Exception;
 
-class AdminController
+class AdminController extends BaseController
 {
     private IUserService $userService;
     private IItemService $itemService;
@@ -33,7 +33,8 @@ class AdminController
     public function showCreateUser()
     {
         $this->requireAdmin();
-        require __DIR__ . '/../Views/createuser.php';
+        $formAction = '/admin/createaccount';
+        require __DIR__ . '/../Views/createaccount.php';
     }
 
     public function createUser()
@@ -47,7 +48,7 @@ class AdminController
             $user->username = trim($_POST['username'] ?? '');
             $user->email = trim($_POST['email'] ?? '');
             $user->password = $_POST['password'] ?? '';
-            $user->role = trim($_POST['role'] ?? '');
+            $user->role = 'user';
 
             $confirmPassword = $_POST['confirmPassword'] ?? '';
 
@@ -58,7 +59,8 @@ class AdminController
             exit();
         } catch (Exception $e) {
             $_SESSION['error_message'] = $e->getMessage();
-            require __DIR__ . '/../Views/createuser.php';
+            header('Location: /admin/createaccount');
+            exit();
         }
     }
 
@@ -97,7 +99,7 @@ class AdminController
             }
 
             $item = new \App\Models\Items();
-            $item->id = (int)$itemId;
+            $item->id = (int) $itemId;
             $item->title = trim($_POST['title'] ?? '');
             $item->description = trim($_POST['description'] ?? '');
             $item->status = trim($_POST['status'] ?? '');
@@ -135,7 +137,7 @@ class AdminController
                 $_SESSION['user']['role']
             );
 
-            $_SESSION['success_message'] = 'Item deleted successfully.';
+            $_SESSION['success_message'] = 'Post deleted successfully.';
             header('Location: /admin');
             exit();
         } catch (Exception $e) {
@@ -153,7 +155,12 @@ class AdminController
             $userId = $vars['id'] ?? null;
             $role = $_POST['role'] ?? '';
 
-            $this->userService->updateUserRole($userId, $role, $_SESSION['user']['role']);
+            $this->userService->updateUserRole(
+                $userId,
+                $role,
+                $_SESSION['user']['role'],
+                $_SESSION['user']['id']
+            );
 
             $_SESSION['success_message'] = 'User role updated successfully.';
             header('Location: /admin');
@@ -179,14 +186,6 @@ class AdminController
         } catch (Exception $e) {
             $_SESSION['error_message'] = $e->getMessage();
             header('Location: /admin');
-            exit();
-        }
-    }
-
-    private function requireAdmin()
-    {
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            header('Location: /login');
             exit();
         }
     }

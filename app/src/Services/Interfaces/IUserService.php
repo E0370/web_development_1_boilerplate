@@ -12,5 +12,5 @@ interface IUserService
 
     public function deleteUser($userId, $currentUserRole);
 
-    public function updateUserRole($userId, $role, $currentUserRole);
+    public function updateUserRole($userId, $role, $currentUserRole, $currentUserId);
 }

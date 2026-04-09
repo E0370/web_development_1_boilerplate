@@ -2,63 +2,69 @@
 
 namespace App\Controllers;
 
+use App\Services\Interfaces\IMailService;
 use App\Services\Interfaces\IPasswordResetService;
+use App\Services\MailService;
 use App\Services\PasswordResetService;
 use Exception;
 
 class ResetPasswordController
 {
     private IPasswordResetService $passwordResetService;
+    private IMailService $mailService;
 
     public function __construct()
     {
         $this->passwordResetService = new PasswordResetService();
+        $this->mailService = new MailService();
     }
 
-    public function showForgotPassword(): void
+    public function showForgotPassword()
     {
         require __DIR__ . '/../Views/forgotpassword.php';
     }
 
-    public function forgotPassword(): void
+    public function forgotPassword()
     {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                header('Location: /forgot-password');
+                header('Location: /forgotpassword');
                 exit();
             }
 
             $email = trim($_POST['email'] ?? '');
-            $token = $this->passwordResetService->requestPasswordReset($email);
+            $resetData = $this->passwordResetService->requestPasswordReset($email);
+
+            if ($resetData !== null) {
+                $this->mailService->sendPasswordResetEmail(
+                    $resetData['email'],
+                    $resetData['resetLink']
+                );
+            }
 
             $_SESSION['password_reset_message'] =
                 'If an account with that email exists, a reset link has been sent.';
 
-            if ($token) {
-                $_SESSION['ResetLink'] = '/reset-password/' . urlencode($token);
-            }
-
             header('Location: /forgot-password');
             exit();
-
         } catch (Exception $e) {
             $_SESSION['reset_error'] = $e->getMessage();
-            header('Location: /forgot-password');
+            header('Location: /forgotpassword');
             exit();
         }
     }
 
-    public function showResetPassword(array $vars = []): void
+    public function showResetPassword(array $vars = [])
     {
         $token = $vars['token'] ?? '';
         require __DIR__ . '/../Views/resetpassword.php';
     }
 
-    public function resetPassword(): void
+    public function resetPassword()
     {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                header('Location: /forgot-password');
+                header('Location: /forgotpassword');
                 exit();
             }
 
@@ -71,10 +77,9 @@ class ResetPasswordController
             $_SESSION['password_reset_message'] = 'Your password has been reset successfully.';
             header('Location: /login');
             exit();
-
         } catch (Exception $e) {
             $_SESSION['reset_error'] = $e->getMessage();
-            header('Location: /reset-password/' . urlencode($_POST['token'] ?? ''));
+            header('Location: /resetpassword/' . urlencode($_POST['token'] ?? ''));
             exit();
         }
     }

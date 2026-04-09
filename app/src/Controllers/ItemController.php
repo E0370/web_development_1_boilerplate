@@ -7,7 +7,7 @@ use App\Services\ItemService;
 use App\Services\Interfaces\IItemService;
 use Exception;
 
-class ItemController
+class ItemController extends BaseController
 {
     private IItemService $itemService;
 
@@ -71,13 +71,11 @@ class ItemController
                 throw new Exception('Item not found.');
             }
 
-            $item = $this->itemService->getItemById($itemId);
-
-            if (!$item) {
-                throw new Exception('Item not found.');
-            }
-
-            $this->authorizeViewOrEdit($item);
+            $item = $this->itemService->getAuthorizedItemById(
+                $itemId,
+                $_SESSION['user']['id'],
+                $_SESSION['user']['role']
+            );
 
             require __DIR__ . '/../Views/edititem.php';
         } catch (Exception $e) {
@@ -98,7 +96,7 @@ class ItemController
             }
 
             $item = new Items();
-            $item->id = (int)$itemId;
+            $item->id = (int) $itemId;
             $item->title = trim($_POST['title'] ?? '');
             $item->description = trim($_POST['description'] ?? '');
             $item->status = trim($_POST['status'] ?? '');
@@ -143,27 +141,6 @@ class ItemController
             $_SESSION['error_message'] = $e->getMessage();
             header("Location: /myitems");
             exit();
-        }
-    }
-
-    private function requireLogin()
-    {
-        if (!isset($_SESSION['user'])) {
-            header("Location: /login");
-            exit();
-        }
-    }
-
-    private function authorizeViewOrEdit($item)
-    {
-        $currentUserId = $_SESSION['user']['id'];
-        $currentUserRole = $_SESSION['user']['role'];
-
-        $isOwner = ((int)$item->user_id === (int)$currentUserId);
-        $isAdmin = ($currentUserRole === 'admin');
-
-        if (!$isOwner && !$isAdmin) {
-            throw new Exception('You are not allowed to access this item.');
         }
     }
 }

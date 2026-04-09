@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Services;
 use App\Services\Interfaces\ILoginService;
 use App\Repositories\LoginRepository;
@@ -6,17 +6,20 @@ use App\Repositories\Interfaces\ILoginRepository;
 use App\Models\User;
 use Exception;
 
-class LoginService implements ILoginService{
+class LoginService implements ILoginService
+{
     private ILoginRepository $loginRepository;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->loginRepository = new LoginRepository();
     }
 
-    public function login($username, $password){
+    public function login($username, $password)
+    {
         $user = $this->loginRepository->login($username, $password);
-        if($user){
-            if(password_verify($password, $user->password)){
+        if ($user) {
+            if (password_verify($password, $user->password)) {
                 return $user;
             }
         }
@@ -24,23 +27,24 @@ class LoginService implements ILoginService{
         return null;
     }
 
-    public function createAccount(User $user, $confirmPassword){
-        if(!empty($user->firstname) && !empty($user->lastname) && !empty($user->username) && !empty($user->email) && !empty($user->password) && !empty($confirmPassword)){
-            if(!filter_var($user->email, FILTER_VALIDATE_EMAIL)){
+    public function createAccount(User $user, $confirmPassword)
+    {
+        if (!empty($user->firstname) && !empty($user->lastname) && !empty($user->username) && !empty($user->email) && !empty($user->password) && !empty($confirmPassword)) {
+            if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
                 throw new Exception("Invalid email.");
             }
 
-            if($this->loginRepository->usernameExists($user)){
+            if ($this->loginRepository->usernameExists($user)) {
                 throw new Exception("Username already exists.");
             }
 
-            if($this->loginRepository->emailExists($user)){
+            if ($this->loginRepository->emailExists($user)) {
                 throw new Exception("Email already exists.");
             }
 
             $this->validatePassword($user->password);
 
-            if(!isset($confirmPassword) || $user->password !== $confirmPassword){
+            if (!isset($confirmPassword) || $user->password !== $confirmPassword) {
                 throw new Exception("Passwords do not match.");
             }
 
@@ -48,10 +52,11 @@ class LoginService implements ILoginService{
 
             $this->loginRepository->createAccount($user);
         }
-        
+
     }
 
-    public function validatePassword($password){
+    public function validatePassword($password)
+    {
         if (strlen($password) < 8) {
             throw new Exception("Password must be at least 8 characters long.");
         }

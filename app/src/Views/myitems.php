@@ -1,6 +1,6 @@
 <?php require __DIR__ . '/partials/header.php'; ?>
 
-<div class="container mt-4">
+<section class="container mt-4" aria-label="My Posts">
     <h2 class="mb-4">My Posts</h2>
 
     <?php if (isset($_SESSION['success_message'])) { ?>
@@ -23,13 +23,9 @@
         <div class="row g-4">
             <?php foreach ($items as $item) { ?>
                 <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
-                        <img
-                            src="/assets/images/<?= htmlspecialchars($item->image) ?>"
-                            class="card-img-top"
-                            alt="<?= htmlspecialchars($item->title) ?>"
-                            style="height: 220px; object-fit: cover;"
-                        >
+                    <article class="card h-100 shadow-sm">
+                        <img src="/assets/images/<?= htmlspecialchars($item->image) ?>" class="card-img-top"
+                            alt="<?= htmlspecialchars($item->title) ?>" style="height: 220px; object-fit: cover;">
 
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($item->title) ?></h5>
@@ -53,13 +49,13 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
             <?php } ?>
         </div>
     <?php } else { ?>
         <p>No Posts found</p>
     <?php } ?>
-</div>
+</section>
 
 <?php require __DIR__ . '/partials/footer.php'; ?>

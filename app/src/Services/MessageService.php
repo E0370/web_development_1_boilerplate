@@ -29,7 +29,7 @@ class MessageService implements IMessageService
             throw new Exception("Message cannot be empty.");
         }
 
-        if ((int)$senderId === (int)$receiverId) {
+        if ((int) $senderId === (int) $receiverId) {
             throw new Exception("You cannot send a message to yourself.");
         }
 

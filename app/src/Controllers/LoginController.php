@@ -97,16 +97,16 @@ class LoginController
     {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                header('Location: /create-account');
+                header('Location: /createaccount');
                 exit();
             }
 
             $user = new User();
             $user->firstname = trim($_POST['firstname'] ?? '');
-            $user->lastname  = trim($_POST['lastname'] ?? '');
-            $user->username  = trim($_POST['username'] ?? '');
-            $user->email     = trim($_POST['email'] ?? '');
-            $user->password  = $_POST['password'] ?? '';
+            $user->lastname = trim($_POST['lastname'] ?? '');
+            $user->username = trim($_POST['username'] ?? '');
+            $user->email = trim($_POST['email'] ?? '');
+            $user->password = $_POST['password'] ?? '';
 
             $confirmPassword = $_POST['confirmPassword'] ?? '';
 

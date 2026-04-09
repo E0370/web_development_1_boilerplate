@@ -7,7 +7,7 @@ class Items{
     public string $title;
     public string $description;
     public string $status;
-    public string $image; // image path
+    public string $image; 
     public string $created_at;
 }
 ?>

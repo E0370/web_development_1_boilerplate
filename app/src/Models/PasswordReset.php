@@ -7,5 +7,4 @@ class PasswordReset{
     public string $token;
     public string $token_expiry;
 }
-
 ?>

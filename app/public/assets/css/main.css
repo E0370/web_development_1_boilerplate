@@ -1,5 +1,9 @@
+html, body {
+    height: 100%;
+}
+
 body {
-    background-color: #ffffff; 
+    background-color: #ffffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     display: flex;
@@ -11,8 +15,13 @@ main {
     flex: 1;
 }
 
+.page-section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
 .navbar {
-    background-color: #1f2937 !important; 
+    background-color: #1f2937 !important;
     padding: 0.8rem 0;
 }
 
@@ -59,85 +68,183 @@ main {
     border-color: #0d6efd;
 }
 
-.site-footer {
-    background-color: #111827;
-    color: #cbd5e1;
-    padding: 30px 0;
-    margin-top: 60px;
-    font-size: 0.9rem;
+.sitefooter {
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: #e5e7eb;
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.site-footer p {
-    margin-bottom: 5px;
-}
-
-.footer-link {
-    color: #9ca3af;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-link:hover {
+.footertitle {
     color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.footerheading {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.footertext,
+.footercopy,
+.footermade {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+.footerlinks li {
+    margin-bottom: 0.55rem;
+}
+
+.footerlinks a,
+.footercontact {
+    color: #dbeafe;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.footerlinks a:hover,
+.footercontact:hover {
+    color: #60a5fa;
     text-decoration: underline;
 }
 
-.passed {
-  text-decoration: line-through;
-  color: green;
-  font-weight: 600;
+.footerdivider {
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
+.footercopy,
+.footermade {
+    font-size: 0.9rem;
+}
+
+.passed {
+    text-decoration: line-through;
+    color: green;
+    font-weight: 600;
+}
+
+/* home page hero image */
 .hero {
-    height: 45vh;
-    background-image: url('/assets/images/hero.jpg');
-    background-size: cover;
-    background-position: center;
+    min-height: calc(100vh - 76px);
+    width: 100vw;
+    margin: 0;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: url('/assets/images/hero.jpg') center center / cover no-repeat;
     position: relative;
 }
 
-.hero-overlay {
-    background: rgba(0, 0, 0, 0.5);
+.herooverlay {
+    min-height: calc(100vh - 76px);
+    width: 100%;
+    background: rgba(0, 0, 0, 0.35);
     color: white;
-    height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.herooverlay .container {
+    max-width: 900px;
 }
 
 /* Chat styles */
-.chat-box {
+.chatbox {
     max-height: 500px;
     overflow-y: auto;
     background-color: #f8f9fa;
 }
 
-.message-bubble {
+.messagebubble {
     max-width: 70%;
     padding: 10px 14px;
     border-radius: 14px;
     word-wrap: break-word;
 }
 
-.my-message {
+.mymessage {
     background-color: #0d6efd;
     color: white;
     border-bottom-right-radius: 4px;
 }
 
-.other-message {
+.othermessage {
     background-color: #e9ecef;
     color: #212529;
     border-bottom-left-radius: 4px;
 }
 
-.message-text {
+.messagetext {
     margin-bottom: 4px;
 }
 
-.message-time {
+.messagetime {
     font-size: 12px;
     opacity: 0.8;
     text-align: right;
+}
+
+@media (max-width: 768px) {
+    .page-section {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .hero,
+    .hero-overlay {
+        min-height: 65vh;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero .lead {
+        font-size: 1rem;
+    }
+
+    .card-img-top {
+        height: 180px !important;
+        object-fit: cover;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero,
+    .hero-overlay {
+        min-height: 55vh;
+        padding: 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 1.6rem;
+    }
+
+    .hero .lead {
+        font-size: 0.95rem;
+    }
+
+    .card-img-top {
+        height: 160px !important;
+    }
+
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }

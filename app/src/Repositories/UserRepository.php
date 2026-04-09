@@ -95,7 +95,7 @@ class UserRepository extends Repository implements IUserRepository
             $stmt->bindParam(':username', $username);
             $stmt->execute();
 
-            return (int)$stmt->fetchColumn() > 0;
+            return (int) $stmt->fetchColumn() > 0;
         } catch (Exception $e) {
             throw new Exception("Error checking username: " . $e->getMessage());
         }
@@ -109,7 +109,7 @@ class UserRepository extends Repository implements IUserRepository
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
-            return (int)$stmt->fetchColumn() > 0;
+            return (int) $stmt->fetchColumn() > 0;
         } catch (Exception $e) {
             throw new Exception("Error checking email: " . $e->getMessage());
         }

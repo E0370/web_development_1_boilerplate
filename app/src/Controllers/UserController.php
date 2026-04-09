@@ -9,7 +9,7 @@ use App\Services\ItemService;
 use App\Repositories\UserRepository;
 use Exception;
 
-class UserController
+class UserController extends BaseController
 {
     private IMessageService $messageService;
     private IItemService $itemService;
@@ -83,7 +83,7 @@ class UserController
 
         } catch (Exception $e) {
             $_SESSION['error_message'] = $e->getMessage();
-            header('Location: /my-messages');
+            header('Location: /mymessages');
             exit();
         }
     }
@@ -114,16 +114,96 @@ class UserController
 
         } catch (Exception $e) {
             $_SESSION['error_message'] = $e->getMessage();
-            header('Location: /my-messages');
+            header('Location: /mymessages');
             exit();
         }
     }
 
-    private function requireLogin()
+    public function getMessagesApi($vars = [])
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /login');
+        try {
+            $this->requireLogin();
+
+            $itemId = $vars['itemId'] ?? null;
+            $otherUserId = $vars['userId'] ?? null;
+            $currentUserId = $_SESSION['user']['id'];
+
+            if (!$itemId || !$otherUserId) {
+                throw new Exception("Conversation not found.");
+            }
+
+            $messages = $this->messageService->getConversationMessages(
+                $itemId,
+                $currentUserId,
+                $otherUserId
+            );
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'currentUserId' => (int) $currentUserId,
+                'messages' => $messages
+            ]);
+            exit();
+
+        } catch (Exception $e) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
             exit();
         }
+    }
+
+    public function sendMessageApi()
+    {
+        try {
+            $this->requireLogin();
+
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception("Invalid request.");
+            }
+
+            $itemId = $_POST['item_id'] ?? null;
+            $receiverId = $_POST['receiver_id'] ?? null;
+            $message = trim($_POST['message'] ?? '');
+            $senderId = $_SESSION['user']['id'];
+
+            if (!$itemId || !$receiverId || $message === '') {
+                throw new Exception("Unable to send message.");
+            }
+
+            $this->messageService->sendMessage($itemId, $senderId, $receiverId, $message);
+
+            $messages = $this->messageService->getConversationMessages(
+                $itemId,
+                $senderId,
+                $receiverId
+            );
+
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'currentUserId' => (int) $senderId,
+                'messages' => $messages
+            ]);
+            exit();
+
+        } catch (Exception $e) {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+            exit();
+        }
+    }
+
+    public function showPrivacyPolicy()
+    {
+        require __DIR__ . '/../Views/privacypolicy.php';
     }
 }

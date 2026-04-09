@@ -32,6 +32,19 @@ class ItemService implements IItemService
         return $this->itemRepository->getItemsByUserId($userId);
     }
 
+    public function getAuthorizedItemById($id, $currentUserId, $currentUserRole)
+    {
+        $item = $this->itemRepository->getItemById($id);
+
+        if (!$item) {
+            throw new Exception("Item not found.");
+        }
+
+        $this->authorizeItemAction($item, $currentUserId, $currentUserRole);
+
+        return $item;
+    }
+
     public function createItem(Items $item, $imageFile)
     {
         $this->validateItemData($item);
@@ -90,11 +103,11 @@ class ItemService implements IItemService
 
     private function authorizeItemAction(Items $item, $currentUserId, $currentUserRole)
     {
-        $isOwner = ((int)$item->user_id === (int)$currentUserId);
+        $isOwner = ((int) $item->user_id === (int) $currentUserId);
         $isAdmin = ($currentUserRole === 'admin');
 
         if (!$isOwner && !$isAdmin) {
-            throw new Exception("You are not allowed to perform this action.");
+            throw new Exception("You are not allowed to access this item.");
         }
     }
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Repositories;
 use App\Framework\Repository;
 use App\Repositories\Interfaces\IPasswordResetRepository;
@@ -15,9 +15,9 @@ class PasswordResetRepository extends Repository implements IPasswordResetReposi
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             $id = $stmt->fetchColumn();
-            return $id ? (int)$id : null;
+            return $id ? (int) $id : null;
         } catch (Exception $e) {
-            echo"Error fetching user ID by email: " . $e->getMessage();
+            echo "Error fetching user ID by email: " . $e->getMessage();
         }
     }
 
@@ -48,21 +48,21 @@ class PasswordResetRepository extends Repository implements IPasswordResetReposi
     }
 
     public function isTokenValid($token)
-{
-    try {
-        $sql = 'SELECT id, user_id, token_expiry FROM password_resets WHERE token = :token AND token_expiry > NOW() LIMIT 1';
-        $stmt = $this->getConnection()->prepare($sql);
-        $stmt->bindParam(':token', $token);
-        $stmt->execute();
+    {
+        try {
+            $sql = 'SELECT id, user_id, token_expiry FROM password_resets WHERE token = :token AND token_expiry > NOW() LIMIT 1';
+            $stmt = $this->getConnection()->prepare($sql);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row ?: null;
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ?: null;
 
-    } catch (Exception $e) {
-        echo "Error token is not valid: " . $e->getMessage();
-        return null;
+        } catch (Exception $e) {
+            echo "Error token is not valid: " . $e->getMessage();
+            return null;
+        }
     }
-}
 
     public function updateUserPassword($userId, $hashedPassword)
     {
@@ -90,5 +90,4 @@ class PasswordResetRepository extends Repository implements IPasswordResetReposi
     }
 
 }
-
 ?>
